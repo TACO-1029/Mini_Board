@@ -3,7 +3,7 @@
 
 		<div id="header">
             <div class="title">
-                <a href="/WebServlet_5_Board_Model1_Sample/">DEMO WEBSITE</a>
+                <a href="/">DEMO WEBSITE</a>
             </div>
             <div class="links">
                 <a href="#"><%= request.getContextPath() %></a>
