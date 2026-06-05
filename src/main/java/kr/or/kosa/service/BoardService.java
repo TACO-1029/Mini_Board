@@ -3,11 +3,9 @@ package kr.or.kosa.service;
 import java.util.List;
 
 import javax.naming.NamingException;
-import jakarta.*;
 import jakarta.servlet.http.HttpServletRequest;
 import kr.or.kosa.dao.BoardDao;
 import kr.or.kosa.dto.Board;
-import kr.or.kosa.dto.Reply;
 
 //JSP 받는 요청 (서비스)를 실행하는 부분
 public class BoardService {
@@ -51,20 +49,7 @@ public class BoardService {
 			return new BoardDao().deleteOk(idx, pwd);
 		}
 		
-		//서비스 요청(댓글 입력하기)
-		public int replyWrite(int idx_fk,String writer,String userid, String content,String pwd) throws NamingException {
-			return new BoardDao().replywrite(idx_fk, writer, userid, content, pwd);
-		}
-		
-		//서비스 요청(댓글 목록 조회하기)
-		public List<Reply> replyList(String idx_fk) throws NamingException{
-			return new BoardDao().replylist(idx_fk);
-		}
-		
-		//서비스 요청(댓글 삭제하기)
-		public int replyDelete(String no, String pwd) throws NamingException {
-			return new BoardDao().replyDelete(no, pwd);
-		}
+
 		
 		//서비스 요청(게시물 상세조회  > 답글 쓰기(rewriteok)
 		public int rewriteok(Board boardata) throws Exception {
@@ -84,7 +69,6 @@ public class BoardService {
 		}
 	
 }
-
 
 
 
