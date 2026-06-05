@@ -177,17 +177,17 @@ public class BoardDao {
 			rs = pstmt.executeQuery();
 			list = new ArrayList<Board>();
 			while(rs.next()) {
-				Board board = new Board();
-				board.setIdx(rs.getInt("idx"));
-				board.setSubject(rs.getString("subject"));
-				board.setWriter(rs.getString("writer"));
-				board.setWritedate(rs.getDate("writedate"));
-				board.setReadnum(rs.getInt("readnum"));
-				
+				Board board = Board.builder()
+				.idx(rs.getInt("idx"))
+				.subject(rs.getString("subject"))
+				.writer(rs.getString("writer"))
+				.writedate(rs.getDate("writedate"))
+				.readnum(rs.getInt("readnum"))
 				//계층형
-				board.setRefer(rs.getInt("refer"));
-				board.setStep(rs.getInt("step"));
-				board.setDepth(rs.getInt("depth"));
+				.refer(rs.getInt("refer"))
+				.step(rs.getInt("step"))
+				.depth(rs.getInt("depth"))
+				.build();
 				
 				list.add(board);
 			}
