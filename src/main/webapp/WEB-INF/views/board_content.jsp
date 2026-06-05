@@ -1,5 +1,4 @@
 <%@page import="kr.or.kosa.dto.Board"%>
-<%@page import="kr.or.kosa.service.BoardService"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -12,44 +11,10 @@
 </head>
 <body>
 	<%
-		String idx= request.getParameter("idx"); //글번호 받기
-		
-		//글 번호를 가지고 오지  않았을 경우 예외처리
-		if(idx == null || idx.trim().equals("")){
-			response.sendRedirect(request.getContextPath() + "/board/board_list.jsp");
-			return; //더 이상 아래 코드가 실행되지 않고 클라이언트에게 바로 코드 전달
-		}
-		
-		idx=idx.trim();
-		//http://192.168.0.12:8090/WebServlet_5_Board_Model1_Sample/board/board_content.jsp?idx=19&cp=1&ps=5
-		//board_content.jsp?idx=19&cp=1&ps=5  //다시 목록으로 갔을때  ... cp , ps 가지고 ...
-		//why: 목록으로 이동시 현재 page 유지하고 싶어요
-		String cpage = request.getParameter("cp"); //current page
-		String pagesize = request.getParameter("ps"); //pagesize
-		
-		//List 페이지 처음 호출 ...
-		if(cpage == null || cpage.trim().equals("")){
-			//default 값 설정
-			cpage = "1"; 
-		}
-	
-		if(pagesize == null || pagesize.trim().equals("")){
-			//default 값 설정
-			pagesize = "5"; 
-		}
-		
-		//상세보기 내용
-		BoardService service = BoardService.getInBoardService();
-		
-		//옵션
-		//조회수 증가
-		boolean isread = service.addReadNum(idx);
-		if(isread)System.out.println("조회증가 : " + isread);
-		
-		
-		//데이터 조회 (1건 (row))
-		Board board = service.content(Integer.parseInt(idx));
-	
+		String idx = (String) request.getAttribute("idx");
+		String cpage = (String) request.getAttribute("cpage");
+		String pagesize = (String) request.getAttribute("pagesize");
+		Board board = (Board) request.getAttribute("board");
 	%>
 	<%
 		pageContext.include("/include/header.jsp");
@@ -91,12 +56,11 @@
 								}
 								out.print(content);
 							%>
-
 						</td>
 					</tr>
 					<tr>
 						<td colspan="4" align="center">
-						<a href="<%=request.getContextPath()%>/board/board_list.jsp?cp=<%=cpage%>&ps=<%=pagesize%>">목록가기</a> |
+						<a href="<%=request.getContextPath()%>/BoardList.do?cp=<%=cpage%>&ps=<%=pagesize%>">목록가기</a> |
 						<a href="<%=request.getContextPath()%>/board/board_edit.jsp?idx=<%=idx%>&cp=<%=cpage%>&ps=<%=pagesize%>">편집</a>	|
 						<a href="<%=request.getContextPath()%>/board/board_delete.jsp?idx=<%=idx%>&cp=<%=cpage%>&ps=<%=pagesize%>">삭제</a> |
 						<a href="<%=request.getContextPath()%>/board/board_rewrite.jsp?idx=<%=idx%>&cp=<%=cpage%>&ps=<%=pagesize%>&subject=<%=board.getSubject()%>">답글</a>
@@ -106,23 +70,21 @@
 				<br>
 				<!--  꼬리글 달기 테이블 -->
 				<form name="reply" id="replyForm" method="POST">
-						<!-- hidden 태그  값을 숨겨서 처리  -->
-						<input type="hidden" name="idx" value="<%=idx%>"> 
-						<input type="hidden" name="userid" value=""><!-- 추후 필요에 따라  -->
-						<!-- hidden data -->
+						<input type="hidden" name="idx" value="<%=idx%>">
+						<input type="hidden" name="userid" value="">
 						<table width="80%" border="1">
 							<tr>
 								<th colspan="2">덧글 쓰기</th>
 							</tr>
 							<tr>
 								<td align="left">작성자 :
-								 	<input type="text" name="reply_writer"><br /> 
-								 	내&nbsp;&nbsp;용 : 
+								 	<input type="text" name="reply_writer"><br />
+								 	내&nbsp;&nbsp;용 :
 								 	<textarea name="reply_content" rows="2" cols="50"></textarea>
 								</td>
 								<td align="left">
 									비밀번호:
-									<input type="password" name="reply_pwd" size="4"> 
+									<input type="password" name="reply_pwd" size="4">
 									<input type="button" value="등록" onclick="reply_check()">
 								</td>
 							</tr>
@@ -266,8 +228,3 @@
 	</script>
 </body>
 </html>
-
-
-
-
-

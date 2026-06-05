@@ -3,7 +3,6 @@ package kr.or.kosa.service;
 import java.util.List;
 
 import javax.naming.NamingException;
-import jakarta.*;
 import jakarta.servlet.http.HttpServletRequest;
 import kr.or.kosa.dao.BoardDao;
 import kr.or.kosa.dto.Board;
