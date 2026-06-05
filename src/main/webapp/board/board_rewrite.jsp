@@ -61,7 +61,7 @@
 	%>
 	<div id="pageContainer">
 		<div style="padding-top: 25px; text-align: center">
-			<form name="bbs" action="board_rewriteok.jsp" method="POST">
+			<form name="bbs" action="<%=request.getContextPath()%>/BoardRewriteOk.do" method="POST">
 			
 				<input type="hidden" name="cp" value="<%= cpage %>" /> 
 				<input type="hidden" name="ps" value="<%= pagesize %>" /> 
@@ -72,7 +72,7 @@
 					<tr>
 						<td width="20%" align="center">제목</td>
 						<td width="80%" align="left">
-							<input type="text" name="subject" size="40" value="<c:out value='${subject}'/>">
+							<input type="text" name="subject" size="40" value="<%= subject %>">
 						</td>
 
 					</tr>
@@ -127,4 +127,3 @@
 	</div>
 </body>
 </html>
-
