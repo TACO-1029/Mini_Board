@@ -62,7 +62,7 @@
 						<td colspan="4" align="center">
 						<a href="<%=request.getContextPath()%>/BoardList.do?cp=<%=cpage%>&ps=<%=pagesize%>">목록가기</a> |
 						<a href="<%=request.getContextPath()%>/board/board_edit.jsp?idx=<%=idx%>&cp=<%=cpage%>&ps=<%=pagesize%>">편집</a>	|
-						<a href="<%=request.getContextPath()%>/board/board_delete.jsp?idx=<%=idx%>&cp=<%=cpage%>&ps=<%=pagesize%>">삭제</a> |
+						<a href="<%=request.getContextPath()%>/BoardDelete.do?idx=<%=idx%>&cp=<%=cpage%>&ps=<%=pagesize%>">삭제</a> |
 						<a href="<%=request.getContextPath()%>/board/board_rewrite.jsp?idx=<%=idx%>&cp=<%=cpage%>&ps=<%=pagesize%>&subject=<%=board.getSubject()%>">답글</a>
 						</td>
 					</tr>

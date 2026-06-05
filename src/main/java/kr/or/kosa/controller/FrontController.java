@@ -11,10 +11,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import kr.or.kosa.action.Action;
 import kr.or.kosa.action.ActionForward;
 import kr.or.kosa.service.BoardContentService;
+import kr.or.kosa.service.BoardDeleteService;
 import kr.or.kosa.service.BoardListService;
 import kr.or.kosa.service.BoardReplyDeleteService;
 import kr.or.kosa.service.BoardReplyListService;
 import kr.or.kosa.service.BoardReplyService;
+import kr.or.kosa.service.BoardWriteService;
 
 @WebServlet("*.do")
 public class FrontController extends HttpServlet {
@@ -50,6 +52,20 @@ public class FrontController extends HttpServlet {
 			forward = action.execute(request, response);
 		} else if (urlCommand.equals("/BoardReplyDelete.do")) {
 			action = new BoardReplyDeleteService();
+			forward = action.execute(request, response);
+		} else if (urlCommand.equals("/BoardWrite.do")) {
+			forward = new ActionForward();
+			forward.setRedirect(false);
+			forward.setPath("/board/board_write.jsp");
+		} else if (urlCommand.equals("/BoardWriteOk.do")) {
+			action = new BoardWriteService();
+			forward = action.execute(request, response);
+		} else if (urlCommand.equals("/BoardDelete.do")) {
+			forward = new ActionForward();
+			forward.setRedirect(false);
+			forward.setPath("/board/board_delete.jsp");
+		} else if (urlCommand.equals("/BoardDeleteOk.do")) {
+			action = new BoardDeleteService();
 			forward = action.execute(request, response);
 		}
 

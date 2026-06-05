@@ -177,15 +177,16 @@ public class BoardDao {
 			list = new ArrayList<Board>();
 			while(rs.next()) {
 				Board board = Board.builder()
-						.idx(rs.getInt("idx"))
-						.subject(rs.getString("subject"))
-						.writer(rs.getString("writer"))
-						.writedate(rs.getDate("writedate"))
-						.readnum(rs.getInt("readnum"))
-						.refer(rs.getInt("refer"))
-						.step(rs.getInt("step"))
-						.depth(rs.getInt("depth"))
-						.build();
+				.idx(rs.getInt("idx"))
+				.subject(rs.getString("subject"))
+				.writer(rs.getString("writer"))
+				.writedate(rs.getDate("writedate"))
+				.readnum(rs.getInt("readnum"))
+				//계층형
+				.refer(rs.getInt("refer"))
+				.step(rs.getInt("step"))
+				.depth(rs.getInt("depth"))
+				.build();
 				
 				list.add(board);
 			}
@@ -248,22 +249,24 @@ public class BoardDao {
 			
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
-				board = Board.builder()
-//						.idx(rs.getInt("idx"))
-						.writer(rs.getString("writer"))
-						.email(rs.getString("email"))
-						.homepage(rs.getString("homepage"))
-						.pwd(rs.getString("pwd"))
-						.subject(rs.getString("subject"))
-						.content(rs.getString("content"))
-						.filename(rs.getString("filename"))
-						.writedate(rs.getDate("writedate"))
-						.readnum(rs.getInt("readnum"))
-						.filesize(rs.getInt("filesize"))
-						.refer(rs.getInt("refer"))
-						.step(rs.getInt("step"))
-						.depth(rs.getInt("depth"))
-						.build();
+				String writer = rs.getString("writer");
+				String email = rs.getString("email");
+				String homepage = rs.getString("homepage");
+				String pwd = rs.getString("pwd");
+				String subject = rs.getString("subject");
+				String content = rs.getString("content");
+				String filename = rs.getString("filename");
+				
+				java.sql.Date writedate = rs.getDate("writedate");
+				int readnum = rs.getInt("readnum");
+				int filesize = rs.getInt("filesize");
+				
+				//계층형
+				int refer = rs.getInt("refer");
+				int step = rs.getInt("step");
+				int depth = rs.getInt("depth");
+				
+				board = new Board(idx, writer, pwd, subject, content, writedate, readnum, filename, filesize, homepage, email, refer, depth, step);
 			}
 			
 		} catch (Exception e) {
@@ -410,7 +413,7 @@ public class BoardDao {
 				conn = ds.getConnection();
 				String sql="insert into reply(no,writer,userid,content,pwd,idx_fk) "+
 				           " values(reply_no.nextval,?,?,?,?,?)";
-				pstmt = conn.prepareStatement(sql);
+				pstmt =conn.prepareStatement(sql);
 				pstmt.setString(1, writer);
 				pstmt.setString(2, userid);
 				pstmt.setString(3,content);
@@ -450,16 +453,15 @@ public class BoardDao {
 				
 				list = new ArrayList<>();
 				while(rs.next()) {
-					Reply replydto = Reply.builder()
-							.no(Integer.parseInt(rs.getString("no")))
-							.writer(rs.getString("writer"))
-							.userid(rs.getString("userid"))
-							.pwd(rs.getString("pwd"))
-							.content(rs.getString("content"))
-							.writedate(rs.getDate("writedate"))
-							.idx_fk(Integer.parseInt(rs.getString("idx_fk")))
-							.build();
+					int no = Integer.parseInt(rs.getString("no"));
+					String writer = rs.getString("writer");
+					String userid = rs.getString("userid");
+					String pwd = rs.getString("pwd");
+					String content  =rs.getString("content");
+					java.sql.Date writedate = rs.getDate("writedate");
+					int idx = Integer.parseInt(rs.getString("idx_fk"));
 					
+					Reply replydto = new Reply(no, writer, userid, pwd, content, writedate, idx);
 					list.add(replydto);
 				}
 				

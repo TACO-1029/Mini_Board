@@ -7,6 +7,109 @@
 	<title>게시판 글쓰기</title>
 	<script type="text/javascript" src="../ckeditor/ckeditor.js" ></script>
 	<link rel="Stylesheet" href="../style/default.css" />
+	<style type="text/css">
+		.write-wrap {
+			max-width: 860px;
+			margin: 34px auto 48px;
+			padding: 0 24px;
+		}
+
+		.write-title {
+			margin-bottom: 18px;
+			border-bottom: 2px solid #5e73bb;
+			padding-bottom: 12px;
+			text-align: left;
+		}
+
+		.write-title h2 {
+			margin: 0;
+			color: #26345f;
+			font-size: 22px;
+			font-weight: bold;
+		}
+
+		.write-title p {
+			margin: 6px 0 0;
+			color: #777;
+			font-size: 12px;
+		}
+
+		.write-form {
+			border: 1px solid #d8dfef;
+			background: #fff;
+			padding: 24px 28px;
+		}
+
+		.write-table {
+			width: 100%;
+			border-collapse: collapse;
+			table-layout: fixed;
+		}
+
+		.write-table th,
+		.write-table td {
+			border-bottom: 1px solid #e8edf7;
+			padding: 12px 10px;
+			text-align: left;
+			vertical-align: middle;
+		}
+
+		.write-table th {
+			width: 120px;
+			color: #243664;
+			font-size: 13px;
+			font-weight: bold;
+			background: #f5f7fc;
+		}
+
+		.write-table input[type="text"],
+		.write-table input[type="password"],
+		.write-table input[type="file"],
+		.write-table textarea {
+			box-sizing: border-box;
+			width: 100%;
+			border: 1px solid #c9d2e6;
+			padding: 8px 10px;
+			color: #333;
+			font-size: 13px;
+			line-height: 1.5;
+		}
+
+		.write-table input[type="password"] {
+			max-width: 240px;
+		}
+
+		.write-table textarea {
+			min-height: 220px;
+			resize: vertical;
+		}
+
+		.required {
+			color: #d54444;
+		}
+
+		.write-actions {
+			padding-top: 22px;
+			text-align: center;
+		}
+
+		.write-actions input {
+			min-width: 96px;
+			height: 36px;
+			border: 1px solid #5e73bb;
+			background: #5e73bb;
+			color: #fff;
+			font-weight: bold;
+			cursor: pointer;
+		}
+
+		.write-actions input[type="reset"] {
+			margin-left: 8px;
+			border-color: #b7bfd4;
+			background: #f4f6fb;
+			color: #47506a;
+		}
+	</style>
 	<SCRIPT type="text/javascript">
 function check(){
     if(!bbs.subject.value){
@@ -42,40 +145,44 @@ function check(){
      %>
 
     <div id="pageContainer">
-        <div style="padding-top: 25px; text-align: center">
+        <div class="write-wrap">
+            <div class="write-title">
+                <h2>게시판 글쓰기</h2>
+                <p>제목, 글쓴이, 비밀번호는 꼭 입력해주세요.</p>
+            </div>
             <!-- form 시작 ---------->
-            <form name="bbs" action="board_writeok.jsp" method="POST">
-                <table width="95%" border="2" align="center">
+            <form name="bbs" class="write-form" action="<%=request.getContextPath()%>/BoardWriteOk.do" method="POST">
+                <table class="write-table">
                     <tr>
-                        <td width="20%" align="center">제목</td>
-                        <td width="80%" align="left"><input type="text"    name="subject" size="40"></td>
+                        <th>제목 <span class="required">*</span></th>
+                        <td><input type="text" name="subject"></td>
                     </tr>
                     <tr>
-                        <td width="20%" align="center">글쓴이</td>
-                        <td width="80%" align="left"><input type="text" name="writer" size="40"></td>
+                        <th>글쓴이 <span class="required">*</span></th>
+                        <td><input type="text" name="writer"></td>
                     </tr>
                     <tr>
-                        <td width="20%" align="center">이메일</td>
-                        <td width="80%" align="left"><input type="text" name="email" size="40"></td>
+                        <th>이메일</th>
+                        <td><input type="text" name="email"></td>
                     </tr>
                     <tr>
-                        <td width="20%" align="center">홈페이지</td>
-                        <td width="80%" align="left"><input type="text" name="homepage" size="40" value="http://"></td>
+                        <th>홈페이지</th>
+                        <td><input type="text" name="homepage" value="http://"></td>
                     </tr>
                     <tr>
-                        <td width="20%" align="center">글내용</td>
-                        <td width="80%" align="left"><textarea rows="10" cols="60" name="content" class="ckeditor"></textarea></td>
+                        <th>글내용</th>
+                        <td><textarea rows="10" cols="60" name="content" class="ckeditor"></textarea></td>
                     </tr>
                     <tr>
-                        <td width="20%" align="center">비밀번호</td>
-                        <td width="80%" align="left"><input type="password" name="pwd" size="20"></td>
+                        <th>비밀번호 <span class="required">*</span></th>
+                        <td><input type="password" name="pwd"></td>
                     </tr>
                     <tr>
-                        <td width="20%" align="center">첨부파일</td>
-                        <td width="80%" align="left"><input type="file" name="filename"></td>
+                        <th>첨부파일</th>
+                        <td><input type="file" name="filename"></td>
                     </tr>
                     <tr>
-                        <td colspan="2" align="center">
+                        <td colspan="2" class="write-actions">
                             <input type="button" value="글쓰기" onclick="check();" /> 
                             <input type="reset"  value="다시쓰기" />
                         </td>
