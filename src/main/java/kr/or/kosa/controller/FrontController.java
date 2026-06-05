@@ -67,6 +67,13 @@ public class FrontController extends HttpServlet {
 		} else if (urlCommand.equals("/BoardDeleteOk.do")) {
 			action = new BoardDeleteService();
 			forward = action.execute(request, response);
+		} else if (urlCommand.equals("/BoardRewrite.do")) {
+			forward = new ActionForward();
+			forward.setRedirect(false);
+			forward.setPath("/board/board_rewrite.jsp");
+		} else if (urlCommand.equals("/BoardRewriteOk.do")) {
+			action = new BoardRewriteService();
+			forward = action.execute(request, response);
 		}
 
 		if (forward != null) {
