@@ -11,6 +11,18 @@
 		testWhileIdle : (true) 커넥션에 	아무런 데이터 송수신이 없을 경우 테스트를 할지 여부를 결정합니다. 
 		timeBetweenEvictionRunsMillis : 커넥션이 	쉬고 있을 때 커넥션 체크 쿼리를 실행하는 시간 간격을 설정합니다. 밀리 세컨드로 설정하며, 저보통 60000(1분)을 줍니다. -->
 
+	<Resource
+		name="jdbc/oracle"
+		auth="Container"
+		type="javax.sql.DataSource"
+		driverClassName="oracle.jdbc.OracleDriver"
+		url="jdbc:oracle:thin:@localhost:1521/freepdb1"
+		username="DO"
+		password="1234"
+		maxTotal="20"
+		maxIdle="20"
+		maxWaitMillis="-1" />
+
 <!--
 	<Resource 
 		maxWait="-1" 
