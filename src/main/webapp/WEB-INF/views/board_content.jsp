@@ -5,9 +5,160 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>board_content</title>
+<title>게시판 글내용</title>
 <link rel="Stylesheet"
 	href="<%=request.getContextPath()%>/style/default.css" />
+<style type="text/css">
+	.content-wrap {
+		max-width: 860px;
+		margin: 34px auto 48px;
+		padding: 0 24px;
+	}
+
+	.content-title {
+		margin-bottom: 18px;
+		border-bottom: 2px solid #5e73bb;
+		padding-bottom: 12px;
+		text-align: left;
+	}
+
+	.content-title h2 {
+		margin: 0;
+		color: #26345f;
+		font-size: 22px;
+		font-weight: bold;
+	}
+
+	.content-title p {
+		margin: 6px 0 0;
+		color: #777;
+		font-size: 12px;
+	}
+
+	.content-table,
+	.reply-table {
+		width: 100%;
+		border-collapse: collapse;
+		table-layout: fixed;
+		border: 1px solid #d8dfef;
+		background: #fff;
+	}
+
+	.content-table th,
+	.content-table td,
+	.reply-table th,
+	.reply-table td {
+		border-bottom: 1px solid #e8edf7;
+		padding: 12px 10px;
+		color: #333;
+		font-size: 13px;
+		vertical-align: middle;
+	}
+
+	.content-table th,
+	.reply-table th {
+		color: #243664;
+		font-weight: bold;
+		background: #f5f7fc;
+		text-align: center;
+	}
+
+	.content-table .content-body {
+		min-height: 120px;
+		line-height: 1.7;
+		text-align: left;
+		word-break: break-all;
+	}
+
+	.content-actions {
+		padding: 18px 0 24px;
+		text-align: center;
+	}
+
+	.content-actions a,
+	.reply-button {
+		display: inline-block;
+		min-width: 70px;
+		height: 32px;
+		box-sizing: border-box;
+		border: 1px solid #5e73bb;
+		background: #5e73bb;
+		color: #fff;
+		font-weight: bold;
+		line-height: 30px;
+		text-align: center;
+		text-decoration: none;
+		cursor: pointer;
+	}
+
+	.content-actions a:hover,
+	.reply-button:hover {
+		background: #4a5fa2;
+		color: #fff;
+	}
+
+	.reply-section {
+		margin-top: 10px;
+	}
+
+	.reply-title {
+		margin: 0 0 10px;
+		color: #26345f;
+		font-size: 16px;
+		text-align: left;
+	}
+
+	.reply-form-table {
+		margin-bottom: 18px;
+	}
+
+	.reply-form-table input[type="text"],
+	.reply-form-table input[type="password"],
+	.reply-form-table textarea,
+	.reply-table input[type="password"] {
+		box-sizing: border-box;
+		border: 1px solid #c9d2e6;
+		padding: 8px 10px;
+		color: #333;
+		font-size: 13px;
+		line-height: 1.5;
+	}
+
+	.reply-form-table input[type="text"],
+	.reply-form-table textarea {
+		width: 100%;
+	}
+
+	.reply-form-table textarea {
+		min-height: 70px;
+		resize: vertical;
+	}
+
+	.reply-form-table input[type="password"],
+	.reply-table input[type="password"] {
+		width: 110px;
+	}
+
+	.reply-table tbody tr:hover {
+		background: #f8faff;
+	}
+
+	.reply-content-cell {
+		text-align: left;
+		line-height: 1.7;
+		word-break: break-all;
+	}
+
+	.reply-date {
+		color: #777;
+		font-size: 12px;
+	}
+
+	.reply-empty {
+		text-align: center;
+		color: #777;
+	}
+</style>
 </head>
 <body>
 	<%
@@ -20,35 +171,37 @@
 		pageContext.include("/include/header.jsp");
 	%>
 	<div id="pageContainer">
-		<div style="padding-top: 30px; text-align: center">
-			<center>
-				<b>게시판 글내용</b>
-				<table width="80%" border="1">
+		<div class="content-wrap">
+			<div class="content-title">
+				<h2>게시판 글내용</h2>
+				<p>게시글 상세 내용을 확인하고 댓글을 남길 수 있습니다.</p>
+			</div>
+				<table class="content-table">
 					<tr>
-						<td width="20%" align="center"><b> 글번호 </b></td>
+						<th width="20%">글번호</th>
 						<td width="30%"><%=idx%></td>
-						<td width="20%" align="center"><b>작성일</b></td>
+						<th width="20%">작성일</th>
 						<td><%=board.getWritedate()%></td>
 					</tr>
 					<tr>
-						<td width="20%" align="center"><b>글쓴이</b></td>
+						<th width="20%">글쓴이</th>
 						<td width="30%"><%=board.getWriter()%></td>
-						<td width="20%" align="center"><b>조회수</b></td>
+						<th width="20%">조회수</th>
 						<td><%=board.getReadnum()%></td>
 					</tr>
 					<tr>
-						<td width="20%" align="center"><b>홈페이지</b></td>
+						<th width="20%">홈페이지</th>
 						<td><%=board.getHomepage()%></td>
-						<td width="20%" align="center"><b>첨부파일</b></td>
+						<th width="20%">첨부파일</th>
 						<td><%=board.getFilename()%></td>
 					</tr>
 					<tr>
-						<td width="20%" align="center"><b>제목</b></td>
+						<th width="20%">제목</th>
 						<td colspan="3"><%=board.getSubject()%></td>
 					</tr>
-					<tr height="100">
-						<td width="20%" align="center"><b>글내용</b></td>
-						<td colspan="3">
+					<tr>
+						<th width="20%">글내용</th>
+						<td colspan="3" class="content-body">
 							<%
 								String content = board.getContent();
 								if(content != null){
@@ -58,41 +211,46 @@
 							%>
 						</td>
 					</tr>
-					<tr>
-						<td colspan="4" align="center">
-						<a href="<%=request.getContextPath()%>/BoardList.do?cp=<%=cpage%>&ps=<%=pagesize%>">목록가기</a> |
-						<a href="<%=request.getContextPath()%>/board/board_edit.jsp?idx=<%=idx%>&cp=<%=cpage%>&ps=<%=pagesize%>">편집</a>	|
-						<a href="<%=request.getContextPath()%>/BoardDelete.do?idx=<%=idx%>&cp=<%=cpage%>&ps=<%=pagesize%>">삭제</a> |
-						<a href="<%=request.getContextPath()%>/board/board_rewrite.jsp?idx=<%=idx%>&cp=<%=cpage%>&ps=<%=pagesize%>&subject=<%=board.getSubject()%>">답글</a>
-						</td>
-					</tr>
 				</table>
-				<br>
+				<div class="content-actions">
+					<a href="<%=request.getContextPath()%>/BoardList.do?cp=<%=cpage%>&ps=<%=pagesize%>">목록</a>
+					<a href="<%=request.getContextPath()%>/board/board_edit.jsp?idx=<%=idx%>&cp=<%=cpage%>&ps=<%=pagesize%>">편집</a>
+					<a href="<%=request.getContextPath()%>/BoardDelete.do?idx=<%=idx%>&cp=<%=cpage%>&ps=<%=pagesize%>">삭제</a>
+					<a href="<%=request.getContextPath()%>/BoardRewrite.do?idx=<%=idx%>&cp=<%=cpage%>&ps=<%=pagesize%>&subject=<%=board.getSubject()%>">답글</a>
+				</div>
+				<div class="reply-section">
+				<h3 class="reply-title">덧글 쓰기</h3>
 				<!--  꼬리글 달기 테이블 -->
 				<form name="reply" id="replyForm" method="POST">
 						<input type="hidden" name="idx" value="<%=idx%>">
 						<input type="hidden" name="userid" value="">
-						<table width="80%" border="1">
+						<table class="content-table reply-form-table">
 							<tr>
-								<th colspan="2">덧글 쓰기</th>
+								<th width="20%">작성자</th>
+								<td width="45%">
+								 	<input type="text" name="reply_writer">
+								</td>
+								<th width="15%">비밀번호</th>
+								<td>
+									<input type="password" name="reply_pwd" size="4">
+								</td>
 							</tr>
 							<tr>
-								<td align="left">작성자 :
-								 	<input type="text" name="reply_writer"><br />
-								 	내&nbsp;&nbsp;용 :
-								 	<textarea name="reply_content" rows="2" cols="50"></textarea>
+								<th>내용</th>
+								<td colspan="3">
+									<textarea name="reply_content" rows="2" cols="50"></textarea>
 								</td>
-								<td align="left">
-									비밀번호:
-									<input type="password" name="reply_pwd" size="4">
-									<input type="button" value="등록" onclick="reply_check()">
+							</tr>
+							<tr>
+								<td colspan="4" align="center">
+									<input type="button" class="reply-button" value="등록" onclick="reply_check()">
 								</td>
 							</tr>
 						</table>
 				</form>
-				<br>
+				<h3 class="reply-title">REPLY LIST</h3>
 				<!-- 꼬리글 목록 테이블 -->
-				<table width="80%" border="1">
+				<table class="reply-table">
 					<thead>
 						<tr>
 							<th colspan="2">REPLY LIST</th>
@@ -100,11 +258,11 @@
 					</thead>
 					<tbody id="replyTableBody">
 						<tr>
-							<td colspan="2" align="center">댓글을 불러오는 중입니다.</td>
+							<td colspan="2" class="reply-empty">댓글을 불러오는 중입니다.</td>
 						</tr>
 					</tbody>
 				</table>
-			</center>
+				</div>
 		</div>
 	</div>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -125,20 +283,20 @@
 			var rows = "";
 
 			if (!data || data.length === 0) {
-				rows = "<tr><td colspan='2' align='center'>등록된 댓글이 없습니다.</td></tr>";
+				rows = "<tr><td colspan='2' class='reply-empty'>등록된 댓글이 없습니다.</td></tr>";
 			} else {
 				$.each(data, function(i, reply) {
-					rows += "<tr align='left'>"
-						+ "<td width='80%'>"
+					rows += "<tr>"
+						+ "<td width='80%' class='reply-content-cell'>"
 						+ "[" + escapeHtml(reply.writer) + "] : " + escapeHtml(reply.content)
-						+ "<br> 작성일:" + escapeHtml(reply.writedate)
+						+ "<br><span class='reply-date'>작성일:" + escapeHtml(reply.writedate) + "</span>"
 						+ "</td>"
-						+ "<td width='20%'>"
+						+ "<td width='20%' align='center'>"
 						+ "<form name='replyDel' method='POST'>"
 						+ "<input type='hidden' name='no' value='" + reply.no + "'>"
 						+ "<input type='hidden' name='idx' value='" + boardIdx + "'>"
 						+ "password :<input type='password' name='delPwd' size='4'> "
-						+ "<input type='button' value='삭제' onclick='reply_del(this.form)'>"
+						+ "<input type='button' class='reply-button' value='삭제' onclick='reply_del(this.form)'>"
 						+ "</form>"
 						+ "</td>"
 						+ "</tr>";

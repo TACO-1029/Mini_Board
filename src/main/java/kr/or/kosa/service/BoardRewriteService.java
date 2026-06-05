@@ -35,13 +35,13 @@ public class BoardRewriteService implements Action {
 			String url;
 			if (result > 0) {
 				msg = "rewrite insert success";
-				url = request.getContextPath() + "/board/board_list.jsp";
+				url = request.getContextPath() + "/BoardList.do";
 				if (cpage != null && pagesize != null) {
 					url += "?cp=" + cpage + "&ps=" + pagesize;
 				}
 			} else {
 				msg = "rewrite insert fail";
-				url = request.getContextPath() + "/board/board_content.jsp?idx=" + idx;
+				url = request.getContextPath() + "/BoardContent.do?idx=" + idx;
 			}
 
 			request.setAttribute("board_msg", msg);
@@ -53,7 +53,7 @@ public class BoardRewriteService implements Action {
 			e.printStackTrace();
 
 			request.setAttribute("board_msg", "rewrite insert fail");
-			request.setAttribute("board_url", request.getContextPath() + "/board/board_list.jsp");
+			request.setAttribute("board_url", request.getContextPath() + "/BoardList.do");
 
 			forward.setRedirect(false);
 			forward.setPath("/board/redirect.jsp");
