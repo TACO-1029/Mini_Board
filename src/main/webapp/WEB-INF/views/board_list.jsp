@@ -12,13 +12,161 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>게시판 목록</title>
 <link rel="Stylesheet" href="<%=request.getContextPath()%>/style/default.css" />
+<style type="text/css">
+	.list-wrap {
+		max-width: 860px;
+		margin: 34px auto 48px;
+		padding: 0 24px;
+	}
+
+	.list-title {
+		margin-bottom: 18px;
+		border-bottom: 2px solid #5e73bb;
+		padding-bottom: 12px;
+		text-align: left;
+	}
+
+	.list-title h2 {
+		margin: 0;
+		color: #26345f;
+		font-size: 22px;
+		font-weight: bold;
+	}
+
+	.list-title p {
+		margin: 6px 0 0;
+		color: #777;
+		font-size: 12px;
+	}
+
+	.list-toolbar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+		border: 1px solid #d8dfef;
+		border-bottom: 0;
+		background: #f5f7fc;
+		padding: 12px 16px;
+		color: #47506a;
+		font-size: 13px;
+	}
+
+	.list-toolbar select {
+		border: 1px solid #c9d2e6;
+		background: #fff;
+		padding: 6px 8px;
+		color: #333;
+		font-size: 13px;
+	}
+
+	.list-toolbar .total-count {
+		font-weight: bold;
+		color: #26345f;
+	}
+
+	.write-link {
+		display: inline-block;
+		min-width: 78px;
+		height: 32px;
+		box-sizing: border-box;
+		border: 1px solid #5e73bb;
+		background: #5e73bb;
+		color: #fff;
+		font-weight: bold;
+		line-height: 30px;
+		text-align: center;
+		text-decoration: none;
+	}
+
+	.write-link:hover {
+		background: #4a5fa2;
+		color: #fff;
+	}
+
+	.list-table {
+		width: 100%;
+		border-collapse: collapse;
+		table-layout: fixed;
+		border: 1px solid #d8dfef;
+		background: #fff;
+	}
+
+	.list-table th,
+	.list-table td {
+		border-bottom: 1px solid #e8edf7;
+		padding: 12px 10px;
+		color: #333;
+		font-size: 13px;
+		vertical-align: middle;
+	}
+
+	.list-table th {
+		color: #243664;
+		font-weight: bold;
+		background: #f5f7fc;
+		text-align: center;
+	}
+
+	.list-table tbody tr:hover {
+		background: #f8faff;
+	}
+
+	.list-table .subject-cell {
+		text-align: left;
+	}
+
+	.list-table .subject-cell a {
+		color: #26345f;
+		font-weight: bold;
+		text-decoration: none;
+	}
+
+	.list-table .subject-cell a:hover {
+		color: #5e73bb;
+		text-decoration: underline;
+	}
+
+	.empty-row {
+		text-align: center;
+		color: #777;
+	}
+
+	.list-pagination {
+		margin-top: 18px;
+		text-align: center;
+		color: #47506a;
+		font-size: 13px;
+	}
+
+	.list-pagination a {
+		display: inline-block;
+		margin: 0 3px;
+		color: #26345f;
+		text-decoration: none;
+	}
+
+	.list-pagination a:hover {
+		color: #5e73bb;
+		text-decoration: underline;
+	}
+
+	.list-pagination .current-page {
+		display: inline-block;
+		margin: 0 3px;
+		color: #d54444;
+		font-weight: bold;
+	}
+
+	.pager-output {
+		margin-top: 10px;
+	}
+</style>
 </head>
 <body>
 	<c:import url="/include/header.jsp" />
-	게시판 목록
-	<br>
 	<%
 		List<Board> list = (List<Board>) request.getAttribute("list");
 		int pageSize = (Integer) request.getAttribute("pageSize");
@@ -32,120 +180,99 @@
 	<c:set var="pagecount" value="<%=pageCount%>" />
 
 	<div id="pagecontainer">
-		<div style="padding-top: 30px; text-align: cetner">
-			<table width="80%" border="1" cellspacing="0" align="center">
-				<tr>
-					<td colspan="5">
-						<!--
-							form 태그 action 전송 주소(목적지) >> submit()
-							>> form name="list" ... action 없다면..
-							>> [현재 URL 창에 있는 주소] 그대로  .....
-							>> board_list.jsp?ps=select 태그 값으로 .... 다시 호출 .....
-							>> http://192.168.0.29:8090/WebServlet_92_Board_Model2_Mvc/BoardList.do?ps=10
-						-->
-						<form name="list" >
-							PageSize설정:
-							<select name="ps" onchange="submit()">
-										<c:forEach var="i" begin="5" end="20" step="5">
-												<c:choose>
-													<c:when test="${pagesize == i}">
-														<option value="${i}" selected>${i}건</option>
-													</c:when>
-													<c:otherwise>
-														<option value="${i}">${i}건 </option>
-													</c:otherwise>
-												</c:choose>
-										</c:forEach>
-										</select>
-						</form>
-					</td>
-				</tr>
-				<tr>
-					<th width="10%">순번</th>
-					<th width="40%">제목</th>
-					<th width="20%">글쓴이</th>
-					<th width="20%">날짜</th>
-					<th width="10%">조회수</th>
-				</tr>
-				<!-- 데이터가 한건도 없는 경우  -->
-				<%
-									if(list == null || list.size() == 0){
-										out.print("<tr><td colspan='5'>데이터가 없습니다</td></tr>");
-									}
-										%>
-				<!-- forEach()  목록 출력하기  -->
-				<c:forEach var="board" items="<%=list %>">
-					<tr onmouseover="this.style.backgroundColor='gray'" onmouseout="this.style.backgroundColor='white'">
-						<td align="center">${board.idx}</td>
-						<td align="left">
-							<c:forEach var="i" begin="1" end="${board.depth}" step="1">
-								&nbsp;&nbsp;&nbsp;
-							</c:forEach>
-							<c:if test="${board.depth > 0}">
-								<img src="${pageContext.request.contextPath}/images/re.gif">
-							</c:if>
-							<a href="${pageContext.request.contextPath}/BoardContent.do?idx=${board.idx}&cp=${cpage}&ps=${pagesize}">
-								<c:choose>
-									<c:when test="${board.subject != null && fn:length(board.subject) > 10}">
-										${fn:substring(board.subject,0,10)}...
-									</c:when>
-									<c:otherwise>
-										${board.subject}
-									</c:otherwise>
-								</c:choose>
-							</a>
-						</td>
-						<td align="center">${board.writer}</td>
-						<td align="center">${board.writedate}</td>
-						<td align="center">${board.readnum}</td>
-					</tr>
-				</c:forEach>
-				<!-- forEach()  -->
-				<tr>
-					<td colspan="5" align="center">
-						<hr width="100%" color="red">
-					</td>
-				</tr>
-				<tr>
-					<td colspan="3" align="center">
-					<!--
-					원칙적인 방법 아래 처럼 구현
-					[1][2][3][다음]
-					[이전][4][5][6][다음]
-					[이전][7][8][9][다음]
-					[이전][10][11]
-
-					현재 아래 코드 [][][][][][][]...
-					-->
-
-						<!--이전 링크 -->
-						<c:if test="${cpage > 1}">
-							<a href="BoardList.do?cp=${cpage-1}&ps=${pagesize}">이전</a>
-						</c:if>
-						<!-- page 목록 나열하기 -->
-						<c:forEach var="i" begin="1" end="${pagecount}" step="1">
+		<div class="list-wrap">
+			<div class="list-title">
+				<h2>게시판 목록</h2>
+				<p>등록된 게시글을 확인하고 상세 내용을 볼 수 있습니다.</p>
+			</div>
+			<div class="list-toolbar">
+				<form name="list">
+					PageSize설정:
+					<select name="ps" onchange="this.form.submit()">
+						<c:forEach var="i" begin="5" end="20" step="5">
 							<c:choose>
-								<c:when test="${cpage==i}">
-										<font color="red" >[${i}]</font>
+								<c:when test="${pagesize == i}">
+									<option value="${i}" selected>${i}건</option>
 								</c:when>
 								<c:otherwise>
-									<a href="BoardList.do?cp=${i}&ps=${pagesize}">[${i}]</a>
+									<option value="${i}">${i}건</option>
 								</c:otherwise>
 							</c:choose>
 						</c:forEach>
-						<!--다음 링크 -->
-						<c:if test="${cpage < pagecount}">
-							<a href="BoardList.do?cp=${cpage+1}&ps=${pagesize}">다음</a>
-						</c:if>
-					</td>
-					<td colspan="2" align="center">총 게시물 수 : <%= totalBoardCount %>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="5" align="center">
-					<%= pager.toString() %>
-					</td>
+					</select>
+				</form>
+				<div>
+					<span class="total-count">총 게시물 수 : <%= totalBoardCount %></span>
+					<a class="write-link" href="<%=request.getContextPath()%>/BoardWrite.do">글쓰기</a>
+				</div>
+			</div>
+			<table class="list-table">
+				<thead>
+					<tr>
+						<th width="10%">순번</th>
+						<th width="40%">제목</th>
+						<th width="20%">글쓴이</th>
+						<th width="20%">날짜</th>
+						<th width="10%">조회수</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- 데이터가 한건도 없는 경우  -->
+					<%
+						if(list == null || list.size() == 0){
+							out.print("<tr><td class='empty-row' colspan='5'>데이터가 없습니다</td></tr>");
+						}
+					%>
+					<!-- forEach()  목록 출력하기  -->
+					<c:forEach var="board" items="<%=list %>">
+						<tr>
+							<td align="center">${board.idx}</td>
+							<td class="subject-cell">
+								<c:forEach var="i" begin="1" end="${board.depth}" step="1">
+									&nbsp;&nbsp;&nbsp;
+								</c:forEach>
+								<c:if test="${board.depth > 0}">
+									<img src="${pageContext.request.contextPath}/images/re.gif">
+								</c:if>
+								<a href="${pageContext.request.contextPath}/BoardContent.do?idx=${board.idx}&cp=${cpage}&ps=${pagesize}">
+									<c:choose>
+										<c:when test="${board.subject != null && fn:length(board.subject) > 10}">
+											${fn:substring(board.subject,0,10)}...
+										</c:when>
+										<c:otherwise>
+											${board.subject}
+										</c:otherwise>
+									</c:choose>
+								</a>
+							</td>
+							<td align="center">${board.writer}</td>
+							<td align="center">${board.writedate}</td>
+							<td align="center">${board.readnum}</td>
+						</tr>
+					</c:forEach>
+				</tbody>
 			</table>
+			<div class="list-pagination">
+				<c:if test="${cpage > 1}">
+					<a href="BoardList.do?cp=${cpage-1}&ps=${pagesize}">이전</a>
+				</c:if>
+				<c:forEach var="i" begin="1" end="${pagecount}" step="1">
+					<c:choose>
+						<c:when test="${cpage==i}">
+							<span class="current-page">[${i}]</span>
+						</c:when>
+						<c:otherwise>
+							<a href="BoardList.do?cp=${i}&ps=${pagesize}">[${i}]</a>
+						</c:otherwise>
+					</c:choose>
+				</c:forEach>
+				<c:if test="${cpage < pagecount}">
+					<a href="BoardList.do?cp=${cpage+1}&ps=${pagesize}">다음</a>
+				</c:if>
+				<div class="pager-output">
+					<%= pager.toString() %>
+				</div>
+			</div>
 		</div>
 	</div>
 </body>

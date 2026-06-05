@@ -16,6 +16,7 @@ import kr.or.kosa.service.BoardListService;
 import kr.or.kosa.service.BoardReplyDeleteService;
 import kr.or.kosa.service.BoardReplyListService;
 import kr.or.kosa.service.BoardReplyService;
+import kr.or.kosa.service.BoardRewriteService;
 import kr.or.kosa.service.BoardWriteService;
 
 @WebServlet("*.do")
