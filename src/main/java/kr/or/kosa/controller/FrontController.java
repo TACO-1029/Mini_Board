@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import kr.or.kosa.action.Action;
 import kr.or.kosa.action.ActionForward;
 import kr.or.kosa.service.BoardDeleteService;
+import kr.or.kosa.service.BoardRewriteService;
 import kr.or.kosa.service.BoardWriteService;
 
 @WebServlet("*.do")
@@ -96,6 +97,13 @@ public class FrontController extends HttpServlet {
 			forward.setPath("/board/board_delete.jsp");
 		} else if (urlCommand.equals("/BoardDeleteOk.do")) {
 			action = new BoardDeleteService();
+			forward = action.execute(request, response);
+		} else if (urlCommand.equals("/BoardRewrite.do")) {
+			forward = new ActionForward();
+			forward.setRedirect(false);
+			forward.setPath("/board/board_rewrite.jsp");
+		} else if (urlCommand.equals("/BoardRewriteOk.do")) {
+			action = new BoardRewriteService();
 			forward = action.execute(request, response);
 		}
 
