@@ -1,5 +1,3 @@
-<%@page import="kr.or.kosa.dto.Reply"%>
-<%@page import="java.util.List"%>
 <%@page import="kr.or.kosa.dto.Board"%>
 <%@page import="kr.or.kosa.service.BoardService"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -18,7 +16,7 @@
 		
 		//글 번호를 가지고 오지  않았을 경우 예외처리
 		if(idx == null || idx.trim().equals("")){
-			response.sendRedirect("board_list.jsp");
+			response.sendRedirect(request.getContextPath() + "/board/board_list.jsp");
 			return; //더 이상 아래 코드가 실행되지 않고 클라이언트에게 바로 코드 전달
 		}
 		
@@ -98,15 +96,16 @@
 					</tr>
 					<tr>
 						<td colspan="4" align="center">
-						<a href="board_list.jsp?cp=<%=cpage%>&ps=<%=pagesize%>">목록가기</a> |
-						<a href="board_edit.jsp?idx=<%=idx%>&cp=<%=cpage%>&ps=<%=pagesize%>">편집</a>	|
-						<a href="board_delete.jsp?idx=<%=idx%>&cp=<%=cpage%>&ps=<%=pagesize%>">삭제</a> |
-						<a href="board_rewrite.jsp?idx=<%=idx%>&cp=<%=cpage%>&ps=<%=pagesize%>&subject=<%=board.getSubject()%>">답글</a>
+						<a href="<%=request.getContextPath()%>/board/board_list.jsp?cp=<%=cpage%>&ps=<%=pagesize%>">목록가기</a> |
+						<a href="<%=request.getContextPath()%>/board/board_edit.jsp?idx=<%=idx%>&cp=<%=cpage%>&ps=<%=pagesize%>">편집</a>	|
+						<a href="<%=request.getContextPath()%>/board/board_delete.jsp?idx=<%=idx%>&cp=<%=cpage%>&ps=<%=pagesize%>">삭제</a> |
+						<a href="<%=request.getContextPath()%>/board/board_rewrite.jsp?idx=<%=idx%>&cp=<%=cpage%>&ps=<%=pagesize%>&subject=<%=board.getSubject()%>">답글</a>
 						</td>
 					</tr>
 				</table>
+				<br>
 				<!--  꼬리글 달기 테이블 -->
-				<form name="reply" action="board_replyok.jsp" method="POST">
+				<form name="reply" id="replyForm" method="POST">
 						<!-- hidden 태그  값을 숨겨서 처리  -->
 						<input type="hidden" name="idx" value="<%=idx%>"> 
 						<input type="hidden" name="userid" value=""><!-- 추후 필요에 따라  -->
@@ -129,67 +128,142 @@
 							</tr>
 						</table>
 				</form>
-				<!-- 유효성 체크	 -->
-				<script type="text/javascript">
-					function reply_check() {
-						var frm = document.reply;
-						if (frm.reply_writer.value == "" || frm.reply_content.value == ""
-							|| frm.reply_pwd.value == "") {
-									alert("댓글 내용, 작성자, 비밀번호를 모두 입력해야합니다.");
-							return false;
-						}
-					frm.submit();
-					}
-					function reply_del(frm) {
-						//alert("del");
-						//var frm = document.replyDel;
-						//alert(frm);
-						if (frm.delPwd.value == "") {
-							alert("비밀번호를 입력하세요");
-							frm.delPwd.focus();
-							return false;
-						}
-						frm.submit();
-					}
-				</script>
 				<br>
 				<!-- 꼬리글 목록 테이블 -->
-				<%
-	  				//덧글 목록 보여주기
-	  				List<Reply> replylist = service.replyList(idx); //참조하는 글번호
-	  				if(replylist != null && replylist.size() > 0){
-				%>
-					<table width="80%" border="1">
+				<table width="80%" border="1">
+					<thead>
 						<tr>
 							<th colspan="2">REPLY LIST</th>
 						</tr>
-					<%	   
-						for(Reply reply : replylist){
-					%>
-						<tr align="left">
-							<td width="80%">
-								[<%=reply.getWriter()%>] : <%=reply.getContent() %>
-								<br> 작성일:<%=reply.getWritedate().toString()%>
-							</td>
-							<td width="20%">
-							<form action="board_replydeleteok.jsp" method="POST" name="replyDel">
-								<input type="hidden" name="no" value="<%=reply.getNo()%>"> 
-								<input type="hidden" name="idx" value="<%=idx%>"> 
-								password :<input type="password" name="delPwd" size="4"> 
-								<input type="button" value="삭제" onclick="reply_del(this.form)">
-							</form>
-						</td>
-					</tr>
-					<%
-					}
-					%>
+					</thead>
+					<tbody id="replyTableBody">
+						<tr>
+							<td colspan="2" align="center">댓글을 불러오는 중입니다.</td>
+						</tr>
+					</tbody>
 				</table>
-				<%
-		  		} 
-				%>
 			</center>
 		</div>
 	</div>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript">
+		var boardIdx = "<%=idx%>";
+
+		$(function() {
+			loadReplyList();
+		});
+
+		function loadReplyList() {
+			$.getJSON("BoardReplyList.do?idx=" + boardIdx, function(data) {
+				renderReplyRows(data);
+			});
+		}
+
+		function renderReplyRows(data) {
+			var rows = "";
+
+			if (!data || data.length === 0) {
+				rows = "<tr><td colspan='2' align='center'>등록된 댓글이 없습니다.</td></tr>";
+			} else {
+				$.each(data, function(i, reply) {
+					rows += "<tr align='left'>"
+						+ "<td width='80%'>"
+						+ "[" + escapeHtml(reply.writer) + "] : " + escapeHtml(reply.content)
+						+ "<br> 작성일:" + escapeHtml(reply.writedate)
+						+ "</td>"
+						+ "<td width='20%'>"
+						+ "<form name='replyDel' method='POST'>"
+						+ "<input type='hidden' name='no' value='" + reply.no + "'>"
+						+ "<input type='hidden' name='idx' value='" + boardIdx + "'>"
+						+ "password :<input type='password' name='delPwd' size='4'> "
+						+ "<input type='button' value='삭제' onclick='reply_del(this.form)'>"
+						+ "</form>"
+						+ "</td>"
+						+ "</tr>";
+				});
+			}
+
+			$("#replyTableBody").html(rows);
+		}
+
+		function reply_check() {
+			var frm = document.reply;
+
+			if (frm.reply_writer.value === "" || frm.reply_content.value === ""
+				|| frm.reply_pwd.value === "") {
+				alert("댓글 내용, 작성자, 비밀번호를 모두 입력해야합니다.");
+				return false;
+			}
+
+			$.ajax({
+				url: "BoardReply.do",
+				type: "POST",
+				data: $("#replyForm").serialize(),
+				dataType: "json",
+				success: function(data) {
+					if (data.result > 0) {
+						alert("댓글 등록 성공");
+						frm.reply_writer.value = "";
+						frm.reply_content.value = "";
+						frm.reply_pwd.value = "";
+						loadReplyList();
+					} else {
+						alert("댓글 등록 실패");
+					}
+				},
+				error: function() {
+					alert("댓글 등록 실패");
+				}
+			});
+
+			return false;
+		}
+
+		function reply_del(frm) {
+			if (frm.delPwd.value === "") {
+				alert("비밀번호를 입력하세요");
+				frm.delPwd.focus();
+				return false;
+			}
+
+			$.ajax({
+				url: "BoardReplyDelete.do",
+				type: "POST",
+				data: $(frm).serialize(),
+				dataType: "json",
+				success: function(data) {
+					if (data.result > 0) {
+						alert("댓글 삭제 성공");
+						loadReplyList();
+					} else if (data.result === 0) {
+						alert("비밀번호가 일치하지 않습니다.");
+					} else if (data.result === -1) {
+						alert("삭제할 댓글을 찾을 수 없습니다.");
+					} else {
+						alert("댓글 삭제 실패");
+					}
+				},
+				error: function() {
+					alert("댓글 삭제 실패");
+				}
+			});
+
+			return false;
+		}
+
+		function escapeHtml(value) {
+			if (value === null || value === undefined) {
+				return "";
+			}
+
+			return String(value)
+				.replace(/&/g, "&amp;")
+				.replace(/</g, "&lt;")
+				.replace(/>/g, "&gt;")
+				.replace(/"/g, "&quot;")
+				.replace(/'/g, "&#039;");
+		}
+	</script>
 </body>
 </html>
 

@@ -3,7 +3,7 @@
 
 		<div id="header">
             <div class="title">
-                <a href="/WebServlet_5_Board_Model1_Sample/">DEMO WEBSITE</a>
+                <a href="/">DEMO WEBSITE</a>
             </div>
             <div class="links">
                 <a href="#"><%= request.getContextPath() %></a>
@@ -16,8 +16,8 @@
             <div>
                 <ul>
                 	<!-- a : 페이지 이동을 처리하는 마크업 -->
-                    <li><a href="<%= request.getContextPath() %>/board/board_list.jsp">BOARD LIST</a></li>
-					<li><a href="<%= request.getContextPath() %>/board/board_write.jsp">BOARD WRITE</a></li>
+                    <li><a href="<%= request.getContextPath() %>/BoardList.do">BOARD LIST</a></li>
+					<li><a href="<%= request.getContextPath() %>/BoardWrite.do">BOARD WRITE</a></li>
 					<li><a href="#"></a></li>
 					<li><a href="#"></a></li>
                 </ul>

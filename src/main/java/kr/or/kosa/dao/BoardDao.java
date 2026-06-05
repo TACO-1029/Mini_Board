@@ -10,10 +10,8 @@ import java.util.List;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import jakarta.*;
 import jakarta.servlet.http.HttpServletRequest;
 import kr.or.kosa.dto.Board;
-import kr.or.kosa.dto.Board.BoardBuilder;
 import kr.or.kosa.dto.Reply;
 
 import javax.sql.DataSource;

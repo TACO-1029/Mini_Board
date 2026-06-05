@@ -10,6 +10,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.or.kosa.action.Action;
 import kr.or.kosa.action.ActionForward;
+import kr.or.kosa.service.BoardReplyDeleteService;
+import kr.or.kosa.service.BoardReplyListService;
+import kr.or.kosa.service.BoardReplyService;
 
 @WebServlet("*.do")
 public class FrontController extends HttpServlet {
@@ -51,20 +54,15 @@ public class FrontController extends HttpServlet {
 		} else if (urlCommand.equals("/BoardList.do")) {
 			action = new BoardListService();
 			forward = action.execute(request, response);
-		} else if (urlCommand.equals("/BoardReply.do")) {
+		} else if (urlCommand.equals("/BoardReplyList.do")) {	// 댓글 목록 JSON 조회
+			action = new BoardReplyListService();
+			forward = action.execute(request, response);
+		} else if (urlCommand.equals("/BoardReply.do")) {	// 댓글 작성
 			action = new BoardReplyService();
 			forward = action.execute(request, response);
-		} else if (urlCommand.equals("/BoardReplyOk.do")) {
-			forward = new ActionForward();
-			forward.setRedirect(false);
-			forward.setPath("/WEB-INF/views/board_replyok.jsp");
-		} else if (urlCommand.equals("/BoardReplyDelete.do")) {
+		} else if (urlCommand.equals("/BoardReplyDelete.do")) {	// 댓글 삭제
 			action = new BoardReplyDeleteService();
 			forward = action.execute(request, response);
-		} else if (urlCommand.equals("/BoardReplyDeleteOk.do")) {
-			forward = new ActionForward();
-			forward.setRedirect(false);
-			forward.setPath("/WEB-INF/views/boardreply_deleteok.jsp");
 		} else if (urlCommand.equals("/BoardWrite.do")) {
 			action = new BoardWriteService();
 			forward = action.execute(request, response);

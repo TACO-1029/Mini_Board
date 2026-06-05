@@ -9,7 +9,7 @@
 	String pwd = request.getParameter("reply_pwd");
 	String idx_fk = request.getParameter("idx");
 	String userid = "empty";
-	//service 객체 생성
+	//service 객체 생성 - 댓글 생성
 	BoardService service = BoardService.getInBoardService();
 	int result = service.replyWrite(Integer.parseInt(idx_fk), writer, userid, content, pwd);
 	
@@ -18,11 +18,11 @@
     String url="";
     
     if(result > 0){
-    	msg ="댓글 입력 성공";
-    	url ="board_content.jsp?idx="+idx_fk;
+	    	msg ="댓글 입력 성공";
+	    	url ="board_content.jsp?idx="+idx_fk;
     }else{
-    	msg="댓글 입력 실패";
-    	url="board_content.jsp?idx="+idx_fk;
+	    	msg="댓글 입력 실패";
+	    	url="board_content.jsp?idx="+idx_fk;
     }
     
     request.setAttribute("board_msg",msg);
