@@ -28,7 +28,7 @@ public class BoardDeleteService implements Action {
 			}
 
 			request.setAttribute("board_msg", msg);
-			request.setAttribute("board_url", request.getContextPath() + "/board/board_list.jsp");
+			request.setAttribute("board_url", request.getContextPath() + "/BoardList.do");
 
 			forward.setRedirect(false);
 			forward.setPath("/board/board_deleteok.jsp");
@@ -36,7 +36,7 @@ public class BoardDeleteService implements Action {
 			e.printStackTrace();
 
 			request.setAttribute("board_msg", "delete fail");
-			request.setAttribute("board_url", request.getContextPath() + "/board/board_list.jsp");
+			request.setAttribute("board_url", request.getContextPath() + "/BoardList.do");
 
 			forward.setRedirect(false);
 			forward.setPath("/board/board_deleteok.jsp");

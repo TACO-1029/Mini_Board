@@ -42,7 +42,7 @@ public class BoardWriteService implements Action {
 			String url = "";
 			if (result > 0) {
 				msg = "글쓰기 성공!";
-				url = request.getContextPath() + "/board/board_list.jsp";
+				url = request.getContextPath() + "/BoardList.do";
 			} else {
 				msg = "글쓰기 실패!";
 				url = request.getContextPath() + "/BoardWrite.do";

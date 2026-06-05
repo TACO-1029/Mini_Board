@@ -16,7 +16,7 @@
             <div>
                 <ul>
                 	<!-- a : 페이지 이동을 처리하는 마크업 -->
-                    <li><a href="<%= request.getContextPath() %>/board/board_list.jsp">BOARD LIST</a></li>
+                    <li><a href="<%= request.getContextPath() %>/BoardList.do">BOARD LIST</a></li>
 					<li><a href="<%= request.getContextPath() %>/BoardWrite.do">BOARD WRITE</a></li>
 					<li><a href="#"></a></li>
 					<li><a href="#"></a></li>

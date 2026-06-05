@@ -135,7 +135,7 @@
 						var frm = document.reply;
 						if (frm.reply_writer.value == "" || frm.reply_content.value == ""
 							|| frm.reply_pwd.value == "") {
-									alert("리플 내용, 작성자, 비밀번호를 모두 입력해야합니다.");
+									alert("댓글 내용, 작성자, 비밀번호를 모두 입력해야합니다.");
 							return false;
 						}
 					frm.submit();
@@ -154,15 +154,15 @@
 				</script>
 				<br>
 				<!-- 꼬리글 목록 테이블 -->
-					<%
-		  				//덧글 목록 보여주기
-		  				List<Reply> replylist = service.replyList(idx); //참조하는 글번호
-		  				if(replylist != null && replylist.size() > 0){
-					%>
-						<table width="80%" border="1">
-							<tr>
-								<th colspan="2">REPLY LIST</th>
-							</tr>
+				<%
+	  				//덧글 목록 보여주기
+	  				List<Reply> replylist = service.replyList(idx); //참조하는 글번호
+	  				if(replylist != null && replylist.size() > 0){
+				%>
+					<table width="80%" border="1">
+						<tr>
+							<th colspan="2">REPLY LIST</th>
+						</tr>
 					<%	   
 						for(Reply reply : replylist){
 					%>
@@ -172,7 +172,7 @@
 								<br> 작성일:<%=reply.getWritedate().toString()%>
 							</td>
 							<td width="20%">
-							<form action="boardreply_deleteOk.jsp" method="POST" name="replyDel">
+							<form action="board_replydeleteok.jsp" method="POST" name="replyDel">
 								<input type="hidden" name="no" value="<%=reply.getNo()%>"> 
 								<input type="hidden" name="idx" value="<%=idx%>"> 
 								password :<input type="password" name="delPwd" size="4"> 

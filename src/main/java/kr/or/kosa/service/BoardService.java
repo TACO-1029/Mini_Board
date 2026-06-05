@@ -16,7 +16,7 @@ public class BoardService {
 		return instance; 
 	}
 	
-	//서비스 요청(글쓰기)
+		//서비스 요청(글쓰기)
 		public int writeOk(Board boarddata) throws Exception {
 			BoardDao dao = new BoardDao();
 			int result = dao.writeok(boarddata);
@@ -50,17 +50,17 @@ public class BoardService {
 			return new BoardDao().deleteOk(idx, pwd);
 		}
 		
-		//서비스 요청(댓글 입력하기)
+		//서비스 요청(댓글 입력하기) - 재원
 		public int replyWrite(int idx_fk,String writer,String userid, String content,String pwd) throws NamingException {
 			return new BoardDao().replywrite(idx_fk, writer, userid, content, pwd);
 		}
 		
-		//서비스 요청(댓글 목록 조회하기)
+		//서비스 요청(댓글 목록 조회하기) - 재원
 		public List<Reply> replyList(String idx_fk) throws NamingException{
 			return new BoardDao().replylist(idx_fk);
 		}
 		
-		//서비스 요청(댓글 삭제하기)
+		//서비스 요청(댓글 삭제하기) - 재원
 		public int replyDelete(String no, String pwd) throws NamingException {
 			return new BoardDao().replyDelete(no, pwd);
 		}
